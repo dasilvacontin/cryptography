@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<head>
+  <style>
+    body {
+      padding: 20px;
+      max-width: 650px;
+      margin: 50px auto;
+      color: #111;
+    }
+
+    section { margin: 70px 0 }
+
+    p {
+      font-size: 16px;
+      font-weight: normal;
+    }
+
+    a {
+      color: #0040ff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+      cursor: help;
+    }
+
+    script,
+    math-source,
+    console {
+      position: relative;
+      display: block;
+      padding: 10px 13px;
+      overflow: hidden;
+
+      font-family: monospace;
+      font-size: 16px;
+      font-weight: normal;
+    }
+
+    math-source::before,
+    script::before,
+    console::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+
+      display: block;
+      padding: 10px 13px;
+      opacity: 0.7;
+      background: inherit;
+    }
+
+    math-source::before { content: 'math' }
+    math-source {
+      display: block;
+      background: #ccc;
+      white-space: nowrap;
+    }
+
+    script::before { content: 'js' }
+    script {
+      white-space: pre;
+      background: #ffde00;
+    }
+
+    console::before { content: 'console' }
+    console {
+      background: #53cbff;
+      background: black;
+      color: white;
+    }
+    console textarea {
+      width: 100%;
+      border: 0;
+
+      background: none;
+      color: inherit;
+      font: inherit;
+
+      resize: none;
+    }
+    console textarea:focus { outline: none }
+    console::after {
+      display: block;
+      padding-top: 10px;
+      content: '// => ' attr(data-output);
+      color: inherit;
+      font: inherit;
+    }
+  </style>
+</head>
+<body>
+  <h1>1. Historic Cryptosistems</h1>
+
+  <section>
+    <h2>1.1 Transposition Ciphers</h2>
+
+    <p>A <b>transposition cipher</b> is a method of encryption by which the positions held by units of <a href="https://en.wikipedia.org/wiki/Plaintext" title="Plaintext">plaintext</a> (which are commonly characters or groups of characters) are shifted according to a regular system, so that the <a href="https://en.wikipedia.org/wiki/Ciphertext" title="Ciphertext">ciphertext</a> constitutes a <a href="https://en.wikipedia.org/wiki/Permutation" title="Permutation">permutation</a> of the plaintext.  Mathematically, a <a href="https://en.wikipedia.org/wiki/Bijective" class="mw-redirect" title="Bijective">bijective</a> function is used on the characters' positions to encrypt and an <a href="https://en.wikipedia.org/wiki/Inverse_function" title="Inverse function">inverse function</a> to decrypt.</p></p>
+
+    <math-source>
+      M = m<sub>1</sub> ... m<sub>d</sub>m<sub>d+1</sub> ... m<sub>2d</sub> ...<br>
+      E<sub>K</sub>(M) = m<sub>f<sup>-1</sup>(1)</sub> ... m<sub>f<sup>-1</sup>(d)</sub>m<sub>d+f<sup>-1</sup>(1)</sub> ... m<sub>d+f<sup>-1</sup>(d)</sub> ...
+    </math-source>
+
+    <script>function transpositionCipher (plaintext, d, f) {
+    let ciphertext = ''
+    for (let i = 0; i < plaintext.length; ++i) {
+      ciphertext += plaintext[d * Math.floor(i / d) + f(d, i % d)]
+    }
+    return ciphertext
+  }</script>
+
+    <console>
+      <textarea>
+  let f = (d, i) => d - i - 1
+  transpositionCipher('hello world!', 4, f)
+      </textarea>
+    </console>
+  </section>
+
+  <section>
+    <h2>1.2 Substitution Ciphers</h2>
+
+    <p>A <b>substitution cipher</b> is a method of <a href="/wiki/Encoding" title="Encoding">encoding</a> by which units of plaintext are replaced with <a href="/wiki/Ciphertext" title="Ciphertext">ciphertext</a>, according to a fixed system; the "units" may be single letters (the most common), pairs of letters, triplets of letters, mixtures of the above, and so forth. The receiver deciphers the text by performing the inverse substitution.</p>
+
+    <math-source>
+      M = m<sub>1</sub>m<sub>2</sub> ...<br>
+      E<sub>K</sub>(M) = f(m<sub>1)</sub>f(m<sub>2</sub>) ...
+    </math-source>
+
+    <script>function substitutionCipher (plaintext, f) {
+    return plaintext.split('').map(f).join('')
+  }</script>
+
+    <console>
+      <textarea>
+  // Caesar cipher (`k` is `3`)
+  // A's charcode is `97`. Z's charcode is `122`.
+  // `26` comes from `122 - 97 + 1`.
+
+  let code = (c) => c.charCodeAt(0)
+  let k = 3
+  let f = (c) => String.fromCharCode(97 + (code(c) - 97 + k) % 26)
+  substitutionCipher('helloworld', f)
+      </textarea>
+    </console>
+  </section>
+
+  <p>MIT. Copyright (c) David da Silva Contin.</p>
+
+  <script>// js that powers this page
+
+function updateConsoleOutput (con) {
+  const editor = con.querySelector('textarea')
+  let code = editor.value.trim().split('\n')
+
+  const lines = code.length
+  const lastLine = lines - 1
+  code[lastLine] = 'return ' + code[lastLine]
+  code = code.join('\n')
+
+  let output
+  try {
+    const input = new Function(code)
+    output = input()
+  } catch (e) {
+    output = e.toString()
+  }
+
+  con.setAttribute('data-output', output)
+}
+
+function updateConsoleHeight (con) {
+  const editor = con.querySelector('textarea')
+  editor.style.height = 'auto'
+  editor.style.height = `${editor.scrollHeight}px`
+}
+
+function onEditorInput (e) {
+  const con = e.target.parentNode
+  updateConsoleOutput(con)
+  updateConsoleHeight(con)
+}
+
+const cons = document.querySelectorAll('console')
+cons.forEach(con => {
+  const editor = con.querySelector('textarea')
+  editor.value = editor.textContent.trim()
+  updateConsoleOutput(con)
+  updateConsoleHeight(con)
+  editor.oninput = onEditorInput
+})</script>
+</body>
+</html>

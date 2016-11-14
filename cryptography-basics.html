@@ -103,17 +103,17 @@
     </math-source>
 
     <script>function transpositionCipher (plaintext, d, f) {
-    let ciphertext = ''
-    for (let i = 0; i < plaintext.length; ++i) {
-      ciphertext += plaintext[d * Math.floor(i / d) + f(d, i % d)]
-    }
-    return ciphertext
-  }</script>
+  let ciphertext = ''
+  for (let i = 0; i < plaintext.length; ++i) {
+    ciphertext += plaintext[d * Math.floor(i / d) + f(d, i % d)]
+  }
+  return ciphertext
+}</script>
 
     <console>
       <textarea>
-  let f = (d, i) => d - i - 1
-  transpositionCipher('hello world!', 4, f)
+let f = (d, i) => d - i - 1
+transpositionCipher('hello world!', 4, f)
       </textarea>
     </console>
   </section>
@@ -129,19 +129,19 @@
     </math-source>
 
     <script>function substitutionCipher (plaintext, f) {
-    return plaintext.split('').map(f).join('')
-  }</script>
+  return plaintext.split('').map(f).join('')
+}</script>
 
     <console>
       <textarea>
-  // Caesar cipher (`k` is `3`)
-  // A's charcode is `97`. Z's charcode is `122`.
-  // `26` comes from `122 - 97 + 1`.
+// Caesar cipher (`k` is `3`)
+// A's charcode is `97`. Z's charcode is `122`.
+// `26` comes from `122 - 97 + 1`.
 
-  let code = (c) => c.charCodeAt(0)
-  let k = 3
-  let f = (c) => String.fromCharCode(97 + (code(c) - 97 + k) % 26)
-  substitutionCipher('helloworld', f)
+let code = (c) => c.charCodeAt(0)
+let k = 3
+let f = (c) => String.fromCharCode(97 + (code(c) - 97 + k) % 26)
+substitutionCipher('helloworld', f)
       </textarea>
     </console>
   </section>

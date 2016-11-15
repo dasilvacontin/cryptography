@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <head>
+  <meta charset="UTF-8">
   <style>
     body {
       padding: 20px;
@@ -90,12 +91,16 @@
   </style>
 </head>
 <body>
-  <h1>1. Historic Cryptosistems</h1>
+  <h1>1. Historic Cryptosystems</h1>
 
   <section>
     <h2>1.1 Transposition Ciphers</h2>
 
-    <p>A <b>transposition cipher</b> is a method of encryption by which the positions held by units of <a href="https://en.wikipedia.org/wiki/Plaintext" title="Plaintext">plaintext</a> (which are commonly characters or groups of characters) are shifted according to a regular system, so that the <a href="https://en.wikipedia.org/wiki/Ciphertext" title="Ciphertext">ciphertext</a> constitutes a <a href="https://en.wikipedia.org/wiki/Permutation" title="Permutation">permutation</a> of the plaintext.  Mathematically, a <a href="https://en.wikipedia.org/wiki/Bijective" class="mw-redirect" title="Bijective">bijective</a> function is used on the characters' positions to encrypt and an <a href="https://en.wikipedia.org/wiki/Inverse_function" title="Inverse function">inverse function</a> to decrypt.</p></p>
+    <p>A <b>transposition cipher</b> is a method of encryption by which the positions held by units of <a href="https://en.wikipedia.org/wiki/Plaintext" title="Plaintext">plaintext</a> (which are commonly characters or groups of characters) are shifted according to a regular system, so that the <a href="https://en.wikipedia.org/wiki/Ciphertext" title="Ciphertext">ciphertext</a> constitutes a <a href="https://en.wikipedia.org/wiki/Permutation" title="Permutation">permutation</a> of the plaintext.</p>
+
+    <p>Mathematically, a <a href="https://en.wikipedia.org/wiki/Bijective" class="mw-redirect" title="Bijective">bijective</a> function is used on the characters' positions to encrypt and an <a href="https://en.wikipedia.org/wiki/Inverse_function" title="Inverse function">inverse function</a> to decrypt.</p>
+
+    <p>Many transposition ciphers permute the plaintext units using a fixed period <em>d</em>. Let <em>ℤ<sub>d</sub> = { 1, 2, ... , d }</em> and <em>f: ℤ<sub>d</sub> → ℤ<sub>d</sub></em> a permutation over <em>ℤ<sub>d</sub></em>. Successive blocks of <em>d</em> characters are encrypted by exchanging the characters according to ƒ.</p>
 
     <math-source>
       M = m<sub>1</sub> ... m<sub>d</sub>m<sub>d+1</sub> ... m<sub>2d</sub> ...<br>
@@ -121,11 +126,15 @@ transpositionCipher('hello world!', 4, f)
   <section>
     <h2>1.2 Substitution Ciphers</h2>
 
-    <p>A <b>substitution cipher</b> is a method of <a href="https://en.wikipedia.org/wiki/Encoding" title="Encoding">encoding</a> by which units of plaintext are replaced with <a href="https://en.wikipedia.org/wiki/Ciphertext" title="Ciphertext">ciphertext</a>, according to a fixed system; the "units" may be single letters (the most common), pairs of letters, triplets of letters, mixtures of the above, and so forth. The receiver deciphers the text by performing the inverse substitution.</p>
+    <p>A <b>substitution cipher</b> replaces each character from a plaintext alphabet <em>A</em> with it's corresponding character from a ciphered alphabet <em>C</em>.</p>
+
+    <p>Formally, <em>A = {a<sub>0</sub>, a<sub>1</sub>, ..., a<sub>n-1</sub>}</em> and <em>C = {f(a<sub>0</sub>), f(a<sub>1</sub>), ..., f(a<sub>n-1</sub>)}</em>, where <em>f: A → C</em> is a biyective function that pairs each unit in <em>A</em> with a unit in <em>C</em>.</p>
+
+    <p>The <b>Caesar cipher</b>, also known as <b>shift cipher</b>, is a simple substitution cipher where <em>A = C</em> and the key is <em>f(a) = (a + k) mod 26</em>, with <em>k</em> between 0 and 25. Caesar himself used <em>k = 3</em>, a right shift of 3, which makes every <em>'a'</em> character become <em>'d'</em>.</p>
 
     <math-source>
       M = m<sub>1</sub>m<sub>2</sub> ...<br>
-      E<sub>K</sub>(M) = f(m<sub>1)</sub>f(m<sub>2</sub>) ...
+      E<sub>K</sub>(M) = f(m<sub>1</sub>)f(m<sub>2</sub>) ...
     </math-source>
 
     <script>function substitutionCipher (plaintext, f) {
@@ -140,8 +149,14 @@ transpositionCipher('hello world!', 4, f)
 
 let code = (c) => c.charCodeAt(0)
 let k = 3
-let f = (c) => String.fromCharCode(97 + (code(c) - 97 + k) % 26)
-substitutionCipher('helloworld', f)
+
+function f (c) {
+  return c === ' '
+    ? c
+    : String.fromCharCode(97 + (code(c) - 97 + k) % 26)
+}
+
+substitutionCipher('hello world', f)
       </textarea>
     </console>
   </section>

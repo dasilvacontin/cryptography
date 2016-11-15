@@ -211,7 +211,7 @@ const cons = document.querySelectorAll('console')
 cons.forEach(con => {
   const editor = con.querySelector('textarea')
 
-  // trim whitespace after/fore opening/closing editor tag
+  // trim whitespace after/before opening/closing editor tag
   editor.value = editor.textContent.trim()
 
   // executing `oninput` to init console's output and height

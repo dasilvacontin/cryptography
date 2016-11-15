@@ -165,6 +165,10 @@ function f (c) {
 substitutionCipher('hello world', f)
       </textarea>
     </console>
+
+    <p>Simple substitution ciphers preserve in the ciphertext the frequency with which the different letters occur in the plaintext, and that heavily facilitates cryptoanalytic attacks.</p>
+
+    <p>Imagine we want to cipher messages in English using the Caesar cipher with <em>k = 3</em>. Since during the cipher process the letter <em>'A'</em> is replaced with the letter <em>'D'</em>, the frequency of the letter <em>'D'</em> in the ciphertext will be the same as the frequency of the letter <em>'A'</em> in the plaintext. Being that the frequencies of the letters in English are known, we can tell that the frequency of the letter <em>'D'</em> in the ciphertext is the same as the frequency of the letter <em>'A'</em> in English, and therefore <em>'D'</em> deciphers as <em>'A'</em>, from what we can easily tell that the <em>k</em> is <em>3</em>.</p>
   </section>
 
   <p>MIT. Copyright (c) David da Silva Contin.</p>

@@ -34,7 +34,7 @@
       overflow: hidden;
 
       font-family: monospace;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: normal;
     }
 
@@ -201,8 +201,8 @@ function updateConsoleHeight (con) {
   editor.style.height = `${editor.scrollHeight}px`
 }
 
-function onEditorInput (e) {
-  const con = e.target.parentNode
+function onEditorInput () {
+  const con = this.parentNode
   updateConsoleOutput(con)
   updateConsoleHeight(con)
 }
@@ -210,10 +210,13 @@ function onEditorInput (e) {
 const cons = document.querySelectorAll('console')
 cons.forEach(con => {
   const editor = con.querySelector('textarea')
+
+  // trim whitespace after/fore opening/closing editor tag
   editor.value = editor.textContent.trim()
-  updateConsoleOutput(con)
-  updateConsoleHeight(con)
+
+  // executing `oninput` to init console's output and height
   editor.oninput = onEditorInput
+  editor.oninput()
 })</script>
 </body>
 </html>
